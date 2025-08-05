@@ -2,6 +2,21 @@ from utils.tools import get_txt_files, read_input, timing_decorator
 from utils.colors import magenta_color, reset_color
 from utils.tools import Point, Grid, Vectors
 
+
+from enum import Enum
+
+class Symbol(Enum):
+    Sun = "S"
+    Moon = "M"
+    opposite_up = "u"
+    opposite_down = "d"
+    opposite_left = "l"
+    opposite_right = "r"
+    equal_up = "U"
+    equal_down = "D"
+    equal_left = "L"
+    equal_right = "R"
+
 files = get_txt_files(__file__)
 
 class Puzzle:
@@ -24,6 +39,29 @@ class Puzzle:
                 return False
         return True
     
+    def solve_use_case_1(self):
+        changed = False
+        for r in range(len(self.grid)):
+            for c in range(len(self.grid[0]) - 2):
+                a, b, c_ = self.grid[r][c], self.grid[r][c+1], self.grid[r][c+2]
+                if a == b != '_' and c_ == '_':
+                    self.grid[r][c+2] = 'M' if a == 'S' else 'S'
+                    changed = True
+                if b == c_ != '_' and a == '_':
+                    self.grid[r][c] = 'M' if b == 'S' else 'S'
+                    changed = True
+        # Repeat for columns
+        for c in range(len(self.grid[0])):
+            for r in range(len(self.grid) - 2):
+                a, b, c_ = self.grid[r][c], self.grid[r+1][c], self.grid[r+2][c]
+                if a == b != '_' and c_ == '_':
+                    self.grid[r+2][c] = 'M' if a == 'S' else 'S'
+                    changed = True
+                if b == c_ != '_' and a == '_':
+                    self.grid[r][c] = 'M' if b == 'S' else 'S'
+                    changed = True
+        return changed
+
     def solve(self):
         pass
 
