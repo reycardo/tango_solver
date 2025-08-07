@@ -318,6 +318,25 @@ class Grid:
     def set_value_at_point(self, point: Point, value):
         self._array[point.y][point.x] = value
 
+    def swap_line(self, axis: str, index: int, new_line: list):
+        """
+        Replace an entire row or column in the grid with new_line.
+        axis: 'row' or 'col'
+        index: row or column index to replace
+        new_line: list of new values (length must match width or height)
+        """
+        if axis == "row":
+            if len(new_line) != self._width:
+                raise ValueError("Length of new_line must match grid width.")
+            self._array[index] = list(new_line)
+        elif axis == "col":
+            if len(new_line) != self._height:
+                raise ValueError("Length of new_line must match grid height.")
+            for y in range(self._height):
+                self._array[y][index] = new_line[y]
+        else:
+            raise ValueError("axis must be 'row' or 'col'")
+
     def valid_location(self, point: Point) -> bool:
         """Check if a location is within the grid"""
         if 0 <= point.x < self._width and 0 <= point.y < self._height:
